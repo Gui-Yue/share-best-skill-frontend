@@ -10,7 +10,8 @@ import {
   formatNumber,
   formatRelativeDate,
   getSkillDisplayName,
-  getSkillIdentifier
+  getSkillIdentifier,
+  splitTagline
 } from "../../lib/utils";
 
 function Section({ title, children }) {
@@ -53,6 +54,7 @@ export default function SkillDetail() {
       null
     );
   }, [routeId, skills]);
+  const taglineLines = useMemo(() => splitTagline(skill?.tagline), [skill]);
 
   const handleDownload = async () => {
     if (!skill?.download_url || downloadState.loading) {
@@ -125,7 +127,13 @@ export default function SkillDetail() {
                   <div className="badge">⭐ {formatNumber(skill.repostars)}</div>
                 </div>
                 <p className="detail-sub">
-                  {skill.tagline || "暂无一句话描述"}
+                  {taglineLines.length
+                    ? taglineLines.map((line, index) => (
+                        <span key={`${line}-${index}`} className="detail-sub-line">
+                          {line}
+                        </span>
+                      ))
+                    : "暂无一句话描述"}
                 </p>
                 <div className="tag-list">
                   {(skill.tags || []).length
@@ -135,8 +143,12 @@ export default function SkillDetail() {
                     : ""}
                 </div>
                 <div className="meta">
-                  <span>分类: {skill.category || "其他"}</span>
-                  <span>最近更新: {formatRelativeDate(skill.updated_at)}</span>
+                  <span className="meta-category">
+                    分类: {skill.category || "其他"}
+                  </span>
+                  <span className="meta-updated">
+                    最近更新: {formatRelativeDate(skill.updated_at)}
+                  </span>
                 </div>
               </div>
             )}

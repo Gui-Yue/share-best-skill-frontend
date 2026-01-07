@@ -7,7 +7,7 @@ import SkillCard from "../components/SkillCard";
 import { useSkills } from "../lib/useSkills";
 import { normalizeText, parseDate } from "../lib/utils";
 
-const PAGE_SIZE = 20;
+const PAGE_SIZE = 16;
 
 function getQueryValue(value) {
   if (Array.isArray(value)) {
