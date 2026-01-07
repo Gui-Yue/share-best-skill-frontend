@@ -1,0 +1,1 @@
+Put skill.db in this folder as public/skill.db before deploying.
