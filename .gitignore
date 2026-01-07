@@ -9,6 +9,8 @@ coverage/
 .env.local
 .env.*.local
 
+public/skill.db
+
 *.log
 npm-debug.log*
 yarn-debug.log*
