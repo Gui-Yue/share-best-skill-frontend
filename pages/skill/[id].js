@@ -147,7 +147,7 @@ export default function SkillDetail() {
           <section className="section">
             <div className="container detail-grid">
               <Section title="描述">
-                <p>中文: {skill.description || "暂无中文描述"}</p>
+                <p>中文: {skill.description_zh || skill.description || "暂无中文描述"}</p>
                 <p>English: {skill.description_en || "暂无英文描述"}</p>
               </Section>
               <Section title="使用场景">

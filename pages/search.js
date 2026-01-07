@@ -24,6 +24,7 @@ function matchesQuery(skill, query) {
   const sources = [
     skill.skill_name,
     skill.tagline,
+    skill.description_zh,
     skill.description,
     skill.description_en,
     skill.use_case,

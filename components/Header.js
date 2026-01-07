@@ -26,7 +26,7 @@ export default function Header({ children }) {
           {children}
           <a
             className="gh-link"
-            href="https://github.com"
+            href="https://github.com/Gui-Yue/share-best-skillfrontend"
             target="_blank"
             rel="noreferrer"
             aria-label="GitHub"
