@@ -1,1 +1,2 @@
-Put skill.db in this folder as public/skill.db before deploying.
+Set NEXT_PUBLIC_SKILL_DB_URL to an external URL for skill.db.
+If you want a local fallback, place it in this folder as public/skill.db.
