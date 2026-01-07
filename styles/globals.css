@@ -760,3 +760,27 @@ button:disabled {
     width: 100%;
   }
 }
+
+@media (prefers-color-scheme: dark) {
+  .tab,
+  .link-button,
+  .tag,
+  .page-button {
+    border-color: var(--border-strong);
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--ink);
+  }
+
+  .tab:hover,
+  .link-button:hover,
+  .page-button:hover {
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  .tab.active,
+  .page-button.active {
+    background: var(--ink);
+    color: var(--bg);
+    border-color: var(--ink);
+  }
+}
