@@ -6,6 +6,8 @@ import SearchBar from "../components/SearchBar";
 import SkillCard from "../components/SkillCard";
 import { useSkills } from "../lib/useSkills";
 import { normalizeText, parseDate } from "../lib/utils";
+import { getCategoryDisplay } from "../lib/constants";
+import { getStrings, useLanguage } from "../lib/i18n";
 
 const PAGE_SIZE = 16;
 
@@ -28,7 +30,9 @@ function matchesQuery(skill, query) {
     skill.description,
     skill.description_en,
     skill.use_case,
+    skill.use_case_en,
     skill.category,
+    ...(skill.tags_en || []),
     ...(skill.tags || [])
   ];
   return sources.some((value) => normalizeText(value).includes(q));
@@ -50,6 +54,8 @@ function sortSkills(skills, sortKey) {
 export default function SearchPage() {
   const router = useRouter();
   const { skills, loading, error } = useSkills();
+  const { language } = useLanguage();
+  const strings = getStrings(language);
   const queryValue = getQueryValue(router.query.q);
   const categoryValue = getQueryValue(router.query.category);
   const pageValue = Number.parseInt(getQueryValue(router.query.page), 10) || 1;
@@ -107,8 +113,8 @@ export default function SearchPage() {
           onChange={setInput}
           onSubmit={() => updateQuery({ q: input.trim(), category: categoryValue, page: 1 })}
           className="compact"
-          placeholder="搜索 skill 名称、描述或标签..."
-          buttonLabel="搜索"
+          placeholder={strings.searchPlaceholder}
+          buttonLabel={strings.searchButton}
         />
       </Header>
       <main>
@@ -117,19 +123,19 @@ export default function SearchPage() {
             <div className="results-bar">
               <div>
                 {categoryValue
-                  ? `${categoryValue} · `
+                  ? `${getCategoryDisplay(categoryValue, language)} · `
                   : queryValue
-                    ? `搜索: ${queryValue} · `
-                    : "搜索结果 · "}
-                {loading ? "加载中" : `${sorted.length} 个结果`}
+                    ? `${strings.resultsForQuery(queryValue)} · `
+                    : `${strings.resultsTitle} · `}
+                {loading ? strings.loading : strings.resultsCount(sorted.length)}
                 {error ? ` · ${error}` : ""}
               </div>
               <div className="sort-select">
-                排序:
+                {strings.sortLabel}
                 <select value={sort} onChange={(event) => setSort(event.target.value)}>
-                  <option value="latest">最新更新</option>
-                  <option value="oldest">最早更新</option>
-                  <option value="stars">GitHub Stars</option>
+                  <option value="latest">{strings.sortLatest}</option>
+                  <option value="oldest">{strings.sortOldest}</option>
+                  <option value="stars">{strings.sortStars}</option>
                 </select>
               </div>
             </div>
@@ -139,7 +145,7 @@ export default function SearchPage() {
         <section className="section">
           <div className="container">
             {loading ? (
-              <div className="loading">正在加载 skills...</div>
+              <div className="loading">{strings.loadingSkills}</div>
             ) : (
               <div className="cards">
                 {paged.length ? (
@@ -151,7 +157,7 @@ export default function SearchPage() {
                     />
                   ))
                 ) : (
-                  <div className="loading">没有匹配的 skill</div>
+                  <div className="loading">{strings.noResults}</div>
                 )}
               </div>
             )}
@@ -166,7 +172,7 @@ export default function SearchPage() {
                 onClick={() => updateQuery({ q: queryValue, category: categoryValue, page: currentPage - 1 })}
                 disabled={currentPage <= 1}
               >
-                ← 上一页
+                {strings.previousPage}
               </button>
               {pageNumbers.map((page) => (
                 <button
@@ -182,7 +188,7 @@ export default function SearchPage() {
                 onClick={() => updateQuery({ q: queryValue, category: categoryValue, page: currentPage + 1 })}
                 disabled={currentPage >= totalPages}
               >
-                下一页 →
+                {strings.nextPage}
               </button>
             </div>
           </div>

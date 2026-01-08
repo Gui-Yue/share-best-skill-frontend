@@ -6,11 +6,14 @@ import SearchBar from "../components/SearchBar";
 import CategoryCard from "../components/CategoryCard";
 import { useSkills } from "../lib/useSkills";
 import { CATEGORIES, DEFAULT_CATEGORY } from "../lib/constants";
+import { getStrings, useLanguage } from "../lib/i18n";
 
 export default function Home() {
   const router = useRouter();
   const [query, setQuery] = useState("");
   const { skills, loading, error } = useSkills();
+  const { language } = useLanguage();
+  const strings = getStrings(language);
 
   const categoryCounts = useMemo(() => {
     const counts = {};
@@ -31,10 +34,8 @@ export default function Home() {
         <section className="hero">
           <div className="container">
             <div className="hero-inner fade-up">
-              <h1 className="hero-title">搜索 Agent Skills</h1>
-              <p className="hero-sub">
-                按名称、描述或标签快速定位你需要的 skill。
-              </p>
+              <h1 className="hero-title">{strings.searchTitle}</h1>
+              <p className="hero-sub">{strings.searchSubtitle}</p>
               <SearchBar
                 value={query}
                 onChange={setQuery}
@@ -48,7 +49,9 @@ export default function Home() {
                 }}
               />
               <div className="meta" style={{ marginTop: "20px" }}>
-                {loading ? "正在加载 skills..." : `${skills.length} 个可用 skills`}
+                {loading
+                  ? strings.loadingSkills
+                  : strings.availableSkills(skills.length)}
                 {error ? ` · ${error}` : ""}
               </div>
             </div>
@@ -57,14 +60,16 @@ export default function Home() {
 
         <section className="section">
           <div className="container">
-            <h2 className="section-title">分类</h2>
+            <h2 className="section-title">{strings.categoriesTitle}</h2>
             <div className="category-grid">
               {CATEGORIES.map((category, index) => (
                 <CategoryCard
                   key={category.key}
-                  label={category.label}
-                  hint={category.hint}
+                  value={category.label}
+                  label={language === "en" ? category.label_en : category.label}
+                  hint={language === "en" ? category.hint_en : category.hint}
                   count={categoryCounts[category.label] ?? 0}
+                  countLabel={strings.categoryCount(categoryCounts[category.label] ?? 0)}
                   style={{ "--delay": `${index * 40}ms` }}
                 />
               ))}

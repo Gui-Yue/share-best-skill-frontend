@@ -153,11 +153,52 @@ img {
 }
 
 .header-actions {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+}
+
+.header-center {
+  display: flex;
+  justify-content: center;
+  min-width: 0;
+}
+
+.header-right {
   display: flex;
   align-items: center;
   gap: 12px;
-  flex-wrap: wrap;
-  justify-content: flex-end;
+}
+
+.lang-toggle {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  overflow: hidden;
+}
+
+.lang-button {
+  border: none;
+  background: transparent;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--muted);
+  transition: color 0.2s ease, background 0.2s ease;
+}
+
+.lang-button + .lang-button {
+  border-left: 1px solid var(--border);
+}
+
+.lang-button.active {
+  background: var(--ink);
+  color: var(--bg);
 }
 
 .gh-link {
@@ -246,7 +287,8 @@ img {
 .search-bar.compact {
   padding: 8px 12px;
   box-shadow: none;
-  min-width: 240px;
+  width: min(560px, 100%);
+  margin: 0 auto;
 }
 
 .search-bar.compact input {
@@ -763,6 +805,7 @@ button:disabled {
 
 @media (prefers-color-scheme: dark) {
   .tab,
+  .lang-toggle,
   .link-button,
   .tag,
   .page-button {
@@ -782,5 +825,13 @@ button:disabled {
     background: var(--ink);
     color: var(--bg);
     border-color: var(--ink);
+  }
+
+  .lang-button {
+    color: var(--ink);
+  }
+
+  .lang-button + .lang-button {
+    border-left-color: var(--border-strong);
   }
 }

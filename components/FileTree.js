@@ -1,3 +1,5 @@
+import { getStrings, useLanguage } from "../lib/i18n";
+
 function cleanLine(line) {
   return line.replace(/^[\s│├└─|+]+/, "").trim();
 }
@@ -98,9 +100,11 @@ function TreeNode({ node }) {
 }
 
 export default function FileTree({ fileTree }) {
+  const { language } = useLanguage();
+  const strings = getStrings(language);
   const tree = buildTree(fileTree);
   if (!tree) {
-    return <div className="tree">暂无文件结构</div>;
+    return <div className="tree">{strings.noFileTree}</div>;
   }
   return (
     <div className="tree">

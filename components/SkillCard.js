@@ -6,10 +6,16 @@ import {
   getSkillIdentifier,
   splitTagline
 } from "../lib/utils";
+import { getCategoryDisplay } from "../lib/constants";
+import { getLocalizedFromBilingual, getStrings, useLanguage } from "../lib/i18n";
 
 export default function SkillCard({ skill, style }) {
-  const tagList = skill.tags || [];
-  const taglineLines = splitTagline(skill.tagline);
+  const { language } = useLanguage();
+  const strings = getStrings(language);
+  const rawTags = language === "en" ? skill.tags_en : skill.tags;
+  const tagList = (rawTags && rawTags.length ? rawTags : skill.tags || []).filter(Boolean);
+  const taglineText = getLocalizedFromBilingual(skill.tagline, language);
+  const taglineLines = splitTagline(taglineText);
   return (
     <Link
       href={`/skill/${getSkillIdentifier(skill)}`}
@@ -24,18 +30,22 @@ export default function SkillCard({ skill, style }) {
                 {line}
               </span>
             ))
-          : "暂无一句话描述"}
+          : strings.noTagline}
       </p>
       <div className="tag-list">
         {tagList.length
           ? tagList
               .slice(0, 5)
               .map((tag, index) => <Tag key={`${tag}-${index}`} label={tag} />)
-          : <Tag label="未标注标签" />}
+          : <Tag label={strings.noTags} />}
       </div>
       <div className="meta">
-        <span className="meta-category">分类: {skill.category || "其他"}</span>
-        <span className="meta-updated">更新: {formatRelativeDate(skill.updated_at)}</span>
+        <span className="meta-category">
+          {strings.categoryLabel}: {getCategoryDisplay(skill.category, language)}
+        </span>
+        <span className="meta-updated">
+          {strings.updatedLabel}: {formatRelativeDate(skill.updated_at, language)}
+        </span>
       </div>
     </Link>
   );

@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { getStrings, useLanguage } from "../lib/i18n";
+import LanguageToggle from "./LanguageToggle";
 
 function GitHubIcon() {
   return (
@@ -15,24 +17,29 @@ function GitHubIcon() {
 }
 
 export default function Header({ children }) {
+  const { language } = useLanguage();
+  const strings = getStrings(language);
   return (
     <header className="header">
       <div className="container header-inner">
         <Link href="/" className="logo">
           <span className="logo-mark">S</span>
-          Skill Search
+          {strings.appName}
         </Link>
         <div className="header-actions">
-          {children}
-          <a
-            className="gh-link"
-            href="https://github.com/Gui-Yue/share-best-skillfrontend"
-            target="_blank"
-            rel="noreferrer"
-            aria-label="GitHub"
-          >
-            <GitHubIcon />
-          </a>
+          <div className="header-center">{children}</div>
+          <div className="header-right">
+            <LanguageToggle />
+            <a
+              className="gh-link"
+              href="https://github.com/Gui-Yue/share-best-skill-frontend"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="GitHub"
+            >
+              <GitHubIcon />
+            </a>
+          </div>
         </div>
       </div>
     </header>

@@ -1,11 +1,17 @@
+import { getStrings, useLanguage } from "../lib/i18n";
+
 export default function SearchBar({
   value,
   onChange,
   onSubmit,
   className = "",
-  placeholder = "搜索 skill 名称、描述或标签...",
-  buttonLabel = "搜索"
+  placeholder,
+  buttonLabel
 }) {
+  const { language } = useLanguage();
+  const strings = getStrings(language);
+  const resolvedPlaceholder = placeholder || strings.searchPlaceholder;
+  const resolvedButtonLabel = buttonLabel || strings.searchButton;
   return (
     <form
       className={`search-bar ${className}`.trim()}
@@ -18,9 +24,9 @@ export default function SearchBar({
         type="search"
         value={value}
         onChange={(event) => onChange?.(event.target.value)}
-        placeholder={placeholder}
+        placeholder={resolvedPlaceholder}
       />
-      <button type="submit">{buttonLabel}</button>
+      <button type="submit">{resolvedButtonLabel}</button>
     </form>
   );
 }
