@@ -5,12 +5,10 @@ import Footer from "../../components/Footer";
 import Tag from "../../components/Tag";
 import FileTree from "../../components/FileTree";
 import MarkdownView from "../../components/MarkdownView";
-import { useSkills } from "../../lib/useSkills";
 import {
   formatNumber,
   formatRelativeDate,
   getSkillDisplayName,
-  getSkillIdentifier,
   splitTagline
 } from "../../lib/utils";
 import { getCategoryDisplay } from "../../lib/constants";
@@ -21,6 +19,7 @@ import {
   getStrings,
   useLanguage
 } from "../../lib/i18n";
+import { useSkillDetail } from "../../lib/useSkillDetail";
 
 function Section({ title, children }) {
   return (
@@ -44,7 +43,6 @@ export default function SkillDetail() {
   const routeId = Array.isArray(router.query.id)
     ? router.query.id[0]
     : router.query.id;
-  const { skills, loading, error } = useSkills();
   const { language } = useLanguage();
   const strings = getStrings(language);
   const [docView, setDocView] = useState("current");
@@ -53,17 +51,7 @@ export default function SkillDetail() {
     error: ""
   });
 
-  const skill = useMemo(() => {
-    if (!routeId) {
-      return null;
-    }
-    const decoded = decodeURIComponent(routeId);
-    return (
-      skills.find((item) => getSkillIdentifier(item) === routeId) ||
-      skills.find((item) => item.skill_name === decoded) ||
-      null
-    );
-  }, [routeId, skills]);
+  const { skill, loading, error } = useSkillDetail(routeId);
   const taglineText = useMemo(
     () => getLocalizedFromBilingual(skill?.tagline, language),
     [skill, language]

@@ -780,6 +780,24 @@ button:disabled {
     padding: 32px;
   }
 
+  .header-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .header-center {
+    width: 100%;
+    justify-content: stretch;
+  }
+
+  .header-right {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
   .detail-grid {
     grid-template-columns: 1fr;
   }
@@ -787,10 +805,16 @@ button:disabled {
   .search-bar {
     flex-direction: column;
     border-radius: 20px;
+    align-items: stretch;
   }
 
   .search-bar button {
     width: 100%;
+  }
+
+  .search-bar input {
+    width: 100%;
+    min-width: 0;
   }
 
   .header-inner {
@@ -799,6 +823,43 @@ button:disabled {
   }
 
   .search-bar.compact {
+    width: 100%;
+  }
+
+  .detail-header {
+    padding: 20px;
+    border-radius: var(--radius);
+    width: 100%;
+  }
+
+  .detail-title {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .detail-title h1 {
+    font-size: 24px;
+  }
+
+  .detail-header .meta {
+    align-items: flex-start;
+  }
+
+  .detail-header .meta-updated {
+    margin-left: 0;
+    text-align: left;
+  }
+
+  .tag-list {
+    gap: 6px;
+  }
+
+  .detail-sub {
+    font-size: 14.5px;
+  }
+
+  .section-card {
     width: 100%;
   }
 }

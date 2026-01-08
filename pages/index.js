@@ -4,28 +4,27 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import SearchBar from "../components/SearchBar";
 import CategoryCard from "../components/CategoryCard";
-import { useSkills } from "../lib/useSkills";
-import { CATEGORIES, DEFAULT_CATEGORY } from "../lib/constants";
+import { CATEGORIES } from "../lib/constants";
 import { getStrings, useLanguage } from "../lib/i18n";
+import { useSkillSummary } from "../lib/useSkillSummary";
 
 export default function Home() {
   const router = useRouter();
   const [query, setQuery] = useState("");
-  const { skills, loading, error } = useSkills();
+  const { counts, total, loading, error } = useSkillSummary();
   const { language } = useLanguage();
   const strings = getStrings(language);
 
   const categoryCounts = useMemo(() => {
-    const counts = {};
+    const next = {};
     CATEGORIES.forEach((category) => {
-      counts[category.label] = 0;
+      next[category.label] = 0;
     });
-    skills.forEach((skill) => {
-      const category = skill.category || DEFAULT_CATEGORY;
-      counts[category] = (counts[category] || 0) + 1;
+    Object.entries(counts || {}).forEach(([category, count]) => {
+      next[category] = count;
     });
-    return counts;
-  }, [skills]);
+    return next;
+  }, [counts]);
 
   return (
     <div>
@@ -51,7 +50,7 @@ export default function Home() {
               <div className="meta" style={{ marginTop: "20px" }}>
                 {loading
                   ? strings.loadingSkills
-                  : strings.availableSkills(skills.length)}
+                  : strings.availableSkills(total)}
                 {error ? ` · ${error}` : ""}
               </div>
             </div>
